@@ -17,4 +17,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/','BlogController@index');
 Route::get('/add-post','BlogController@addPost');
 Route::post('/store', 'BlogController@store');
-
+Route::get('/post/{post}','BlogController@showFull');
+Route::get('/edit/{post}', 'BlogController@edit');
+Route::patch('/storeupdate/{post}', 'BlogController@storeUpdate');
+Route::get('/delete/{post}', 'BlogController@delete');

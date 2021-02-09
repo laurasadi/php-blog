@@ -35,4 +35,21 @@ class BlogController extends Controller
         return redirect('/');
 
     }
+    public function showFull(Post $post){
+        return view ('blog_themes/pages/post', compact('post'));
+    }
+
+    public function edit(Post $post){
+        return view ('blog_themes/pages/edit', compact('post'));
+    }
+
+    public function storeUpdate(Request $request, Post $post){
+        Post::where('id', $post->id)->update($request->only(['title', 'category','body']));
+        return redirect('/');
+    }
+    public function delete(Post $post){
+        $post->delete();
+        return redirect('/');
+    }
 }
+

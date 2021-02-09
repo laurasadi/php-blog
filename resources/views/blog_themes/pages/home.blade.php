@@ -19,6 +19,10 @@
                     <p class="post-meta pt-2">Posted by
                         <a href="#">Start Bootstrap</a>
                         on {{$post->created_at}}</p>
+                        <ul>
+                            <li><a href="/edit/{{$post->id}}">Edit</a></li>
+                            <li><a href="/delete/{{$post->id}}">Delete</a></li>
+                        </ul>
                 </div>
                 </div>
         @endforeach
