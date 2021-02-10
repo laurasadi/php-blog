@@ -4,31 +4,37 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Post;
+use App\Category;
+use Illuminate\Support\Facades\DB;
 
 class BlogController extends Controller
 {
     public function index(){
 
-        $posts = Post::paginate(5);
+        $posts = DB::table('posts')
+            ->join('categories', 'posts.categoryid', "=", 'categories.id')
+            ->select('posts.id', 'posts.title','posts.body','posts.created_at','categories.name')
+            ->paginate(5);
 
         return view('blog_themes/pages/home', compact('posts'));
     }
 
     public function addPost(){
-        return view('blog_themes/pages/add-post');
+        $categories = Category::all();
+        return view('blog_themes/pages/add-post', compact('categories'));
     }
 
     public function store(Request $request){
         $validateData = $request->validate([
             'title' => 'required|unique:posts|max:255',
             'body' => 'required',
-            'category' => 'required'
+            'categoryid' => 'required'
         ]);
 //        dd($request);
 
         Post::create([
             'title' => request('title'),
-            'category' => request('category'),
+            'categoryid' => request('categoryid'),
             'body' => request('body'),
         ]);
 
@@ -51,5 +57,6 @@ class BlogController extends Controller
         $post->delete();
         return redirect('/');
     }
+
 }
 
