@@ -29,3 +29,9 @@ Route::get('/add-category','CategoryController@addCategory');
 Route::post('/store', 'CategoryController@storeCategory');
 Route::get('/all-categories','CategoryController@showCategories');
 Route::get('/deletecategory/{category}', 'CategoryController@delete');
+
+Auth::routes();
+Route::get('/logout','\App\Http\Controllers\Auth\LoginController@logout');
+
+
+//Route::get('/home', 'HomeController@index')->name('home');

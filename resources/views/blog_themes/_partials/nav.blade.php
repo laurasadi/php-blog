@@ -19,7 +19,11 @@
                 <li class="nav-item">
                     <a class="nav-link" href="add-post">Add Post</a>
                 </li>
-
+                @if (Auth::check())
+                    <li><a href="/logout">Atsijungti</a></li>
+                @else
+                    <li><a href="/login">Prisijungti</a></li>
+                    @endif
             </ul>
         </div>
     </div>

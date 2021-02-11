@@ -14,7 +14,7 @@
             <tr>
                 @foreach($categories as $category)
                     <td>{{$category->id}}</td>
-                    <td>{{$category -> name}}</td>
+                    <td>{{$category -> namecat}}</td>
                     <td><a href="/deletecategory/{{$category->id}}">Delete</a></td>
             </tr>
             @endforeach

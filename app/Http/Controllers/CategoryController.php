@@ -19,7 +19,7 @@ class CategoryController extends Controller
 //        ]);
 ////        dd($request);
         Category::create([
-            'name' => request('name')
+            'namecat' => request('namecat')
         ]);
         return redirect('/');
     }

@@ -7,7 +7,7 @@
             <form action="/store" method="post">
                 {{csrf_field()}}
                 <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Category Name" name="name">
+                    <input type="text" class="form-control" placeholder="Category Name" name="namecat">
                 </div>
 
                 <button type="submit" class="btn btn-primary">Submit</button>

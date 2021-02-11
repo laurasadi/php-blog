@@ -6,14 +6,22 @@ use Illuminate\Http\Request;
 use App\Post;
 use App\Category;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class BlogController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth',['except'=>['index','showFull']]);
+    }
+
     public function index(){
 
         $posts = DB::table('posts')
             ->join('categories', 'posts.categoryid', "=", 'categories.id')
-            ->select('posts.id', 'posts.title','posts.body','posts.created_at','categories.name')
+            ->join('users', 'posts.user_id', "=", 'users.id')
+            ->select('posts.id', 'posts.title','posts.body','posts.created_at','posts.user_id','categories.namecat', 'users.name')
             ->paginate(5);
 
         return view('blog_themes/pages/home', compact('posts'));
@@ -30,14 +38,13 @@ class BlogController extends Controller
             'body' => 'required',
             'categoryid' => 'required'
         ]);
-//        dd($request);
 
         Post::create([
             'title' => request('title'),
             'categoryid' => request('categoryid'),
             'body' => request('body'),
+            'user_id' =>Auth::id()
         ]);
-
         return redirect('/');
 
     }
@@ -46,7 +53,10 @@ class BlogController extends Controller
     }
 
     public function edit(Post $post){
-        return view ('blog_themes/pages/edit', compact('post'));
+        if(Gate::allows('update',$post)){
+            return view ('blog_themes/pages/edit', compact('post'));
+        }
+       dd('klaida');
     }
 
     public function storeUpdate(Request $request, Post $post){
@@ -54,6 +64,7 @@ class BlogController extends Controller
         return redirect('/');
     }
     public function delete(Post $post){
+        if(Gate::allows('delete',$post))
         $post->delete();
         return redirect('/');
     }
