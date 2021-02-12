@@ -15,6 +15,10 @@
                 <div class="form-group">
                     <textarea class="form-control" placeholder="Tekstas" name="body">{{$post->body}}"></textarea>
                 </div>
+                <div class="form-group">
+                    <label for="upload">Nuotrauka</label>
+                    <input type="file" class="form-control" id="upload" name="img">
+                </div>
                 <button type="submit" class="btn btn-primary">Submit edited</button>
             </form>
         </div>

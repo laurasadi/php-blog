@@ -8,6 +8,7 @@ use App\Category;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use File;
 
 class BlogController extends Controller
 {
@@ -21,7 +22,7 @@ class BlogController extends Controller
         $posts = DB::table('posts')
             ->join('categories', 'posts.categoryid', "=", 'categories.id')
             ->join('users', 'posts.user_id', "=", 'users.id')
-            ->select('posts.id', 'posts.title','posts.body','posts.created_at','posts.user_id','categories.namecat', 'users.name')
+            ->select('posts.id', 'posts.title','posts.body','posts.created_at','posts.user_id','categories.namecat', 'users.name', 'posts.img')
             ->paginate(5);
 
         return view('blog_themes/pages/home', compact('posts'));
@@ -36,13 +37,17 @@ class BlogController extends Controller
         $validateData = $request->validate([
             'title' => 'required|unique:posts|max:255',
             'body' => 'required',
-            'categoryid' => 'required'
+            'categoryid' => 'required',
+            'img' => 'mimes:jpeg, jpg, png, gif|required|max:1000'
         ]);
+        $path = $request->file('img')->store('public/images');
+        $filename = str_replace('public/',"",$path);
 
         Post::create([
             'title' => request('title'),
             'categoryid' => request('categoryid'),
             'body' => request('body'),
+            'img' => $filename,
             'user_id' =>Auth::id()
         ]);
         return redirect('/');
@@ -60,6 +65,12 @@ class BlogController extends Controller
     }
 
     public function storeUpdate(Request $request, Post $post){
+        if($request->file()) {
+            File::delete(storage_path('app/public/', $post->img));
+            $path = $request->file('img')->store('public/images');
+            $filename = str_replace('public/', "", $path);
+            Post::where('id', $post->id)->update(['img' => $filename]);
+        }
         Post::where('id', $post->id)->update($request->only(['title', 'category','body']));
         return redirect('/');
     }

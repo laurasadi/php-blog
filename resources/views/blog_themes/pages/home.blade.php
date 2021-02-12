@@ -14,6 +14,11 @@
                             <p class="text-secondary">{{$post->namecat}}</p>
                             <h3 class="post-body font-weight-normal mb-4">{{ substr($post->body, 0,  250) }}
                             </h3>
+
+                            <div>
+                            <img src="{{asset($post->img)}}">
+                            </div>
+
                         </a>
                         <a href="post/{{$post->id}}" class="bg-info text-white p-2">Read more</a>
                         <p class="post-meta pt-2">Posted by
